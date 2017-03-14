@@ -1,0 +1,44 @@
+- hosts: test
+  vars:
+    kms_stack_name: ansible-role-cfn-kms-testing
+    kms_key_description: Ansible KMS role testing
+    region: us-west-2
+    kms_key_policy:
+      Id: "key-default-1"
+      Version: "2012-10-17"
+      Statement:
+        -
+            Sid: "Allow administration of the key"
+            Effect: "Allow"
+            Principal:
+              AWS: "*"
+            Action:
+              - "kms:Create*"
+              - "kms:Describe*"
+              - "kms:Enable*"
+              - "kms:List*"
+              - "kms:Put*"
+              - "kms:Update*"
+              - "kms:Revoke*"
+              - "kms:Disable*"
+              - "kms:Get*"
+              - "kms:Delete*"
+              - "kms:ScheduleKeyDeletion"
+              - "kms:CancelKeyDeletion"
+            Resource: "*"
+        -
+            Sid: "Allow use of the key"
+            Effect: "Allow"
+            Principal:
+              AWS: "*"
+            Action:
+              - "kms:Encrypt"
+              - "kms:Decrypt"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:DescribeKey"
+            Resource: "*"
+    kms_tags:
+      "Name": "{{ kms_stack_name }}"
+  roles:
+    - role: ansible-role-cfn-kms

@@ -1,0 +1,2 @@
+- include: kms.yml
+- include: kms.yml kms_stack_state=absent

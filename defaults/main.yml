@@ -1,0 +1,8 @@
+kms_key_resource_name: KMSKey
+kms_build_dir: "{{ playbook_dir }}/build"
+kms_rendered_template: "{{ kms_build_dir }}/kms.json"
+kms_region: "{{ region }}"
+kms_disable_rollback: false
+kms_key_enabled: "true"
+kms_key_enable_rotation: "true"
+kms_stack_state: present

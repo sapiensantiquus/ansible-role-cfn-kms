@@ -1,0 +1,45 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Parameters":{
+    "KMSKeyDescription":{
+      "Type": "String"
+    },
+    "KMSKeyAutoRotation":{
+      "Type": "String",
+      "AllowedValues": [
+        "true",
+        "false"
+      ]
+    },
+    "KMSKeyEnabled":{
+      "Type": "String",
+      "AllowedValues": [
+        "true",
+        "false"
+      ]
+    }
+  },
+  "Resources" : {
+    "{{ kms_key_resource_name }}": {
+      "Type" : "AWS::KMS::Key",
+      "Properties" : {
+        "Description" : { "Ref" : "KMSKeyDescription" },
+        "Enabled" : { "Ref" : "KMSKeyEnabled" },
+        "EnableKeyRotation" : { "Ref": "KMSKeyAutoRotation" },
+        "KeyPolicy" : {{ kms_key_policy | to_json }}
+      }
+    }
+  },
+  "Outputs": {
+    "KMSKeyARN" : {
+      "Value": {
+        "Fn::GetAtt": [ "{{ kms_key_resource_name }}", "Arn"]
+      }
+    },
+    "KMSKeyId" : {
+      "Value": {
+        "Ref": "{{ kms_key_resource_name }}" 
+      }
+    }
+  }
+}

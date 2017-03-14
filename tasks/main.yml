@@ -1,0 +1,25 @@
+- name: Create necessary dirs
+  file:
+    state: directory
+    path: "{{ item }}"
+  with_items:
+    - "{{ kms_build_dir }}"
+
+- name: Build the CFN template
+  template:
+    src: "kms.j2.json"
+    dest: "{{ kms_rendered_template }}"
+
+- name: Deploy the stack (cluster)
+  cloudformation:
+    stack_name: "{{ kms_stack_name }}"
+    template_parameters:
+      KMSKeyEnabled: "{{ kms_key_enabled }}"
+      KMSKeyAutoRotation: "{{ kms_key_enable_rotation }}"
+      KMSKeyDescription: "{{ kms_key_description }}"
+    region: "{{ kms_region }}"
+    disable_rollback: "{{ kms_disable_rollback }}"
+    template: "{{ kms_rendered_template }}"
+    state: "{{ kms_stack_state }}"
+    tags: "{{ kms_tags }}"
+  register: kms_stack
